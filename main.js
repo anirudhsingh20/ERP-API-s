@@ -1,6 +1,15 @@
 const express = require('express')
 const path = require('path')
-const PORT = 8085
+const PORT = 8080
+const mongoose = require('mongoose')
+const bodyparser = require('body-parser')
+
+//routes
+const authRoutes = require('./routes/auth')
+const studentRoutes = require('./routes/student')
+const fieldsRoutes = require('./routes/field')
+const departmentRoutes = require('./routes/department')
+
 
 const app = express()
 
@@ -11,14 +20,20 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('hello',(req,res,next)=>{
-   return  res.status(200).json({"hello":"hello"})
-})
+app.use(bodyparser.json())
+app.use(departmentRoutes)
+app.use(studentRoutes)
+app.use(authRoutes)
+app.use(fieldsRoutes)
 
-app.use(express.static(path.join(__dirname,'public')))
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 
-app.listen(PORT, ()=>{
-
-    console.log(`the server is running on port : ${PORT}`)
-})
+mongoose.connect(
+    'mongodb+srv://anirudh:anirudh12@cluster0-qrafd.mongodb.net/ERP?retryWrites=true&w=majority'
+    )
+    .then(() => {
+        app.listen(PORT, () => { console.log(`\n Server is running on port : ${PORT}`) })
+    })
+    .catch(err=>console.log(err))
