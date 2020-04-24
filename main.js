@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const bodyparser = require('body-parser')
 
 //routes
-const authRoutes = require('./routes/auth')
+const collegeRoutes = require('./routes/college')
 const studentRoutes = require('./routes/student')
 const fieldsRoutes = require('./routes/field')
 const departmentRoutes = require('./routes/department')
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 app.use(bodyparser.json())
 app.use(departmentRoutes)
 app.use(studentRoutes)
-app.use(authRoutes)
+app.use(collegeRoutes)
 app.use(fieldsRoutes)
 
 

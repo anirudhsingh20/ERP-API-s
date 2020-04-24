@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs')
 
 
 exports.postStudent = async (req, res, next) => {
-    console.log('hit')
     try {
         const name = req.body.name
         const rollNo = req.body.rollNo
@@ -15,7 +14,6 @@ exports.postStudent = async (req, res, next) => {
         const address = req.body.address
         const collegeName = req.body.collegeName
 
-        console.log(name,rollNo,email,password,address,field,collegeName,phoneNo,branch)
         const hashedPass = await bcrypt.hash(password, 12)
 
         let stud = new Student({
@@ -27,7 +25,7 @@ exports.postStudent = async (req, res, next) => {
             branch: branch,
             field: field,
             address: address,
-            collegeName:collegeName
+            collegeName: collegeName
         })
         let studDetails = await stud.save()
 
@@ -50,4 +48,28 @@ exports.getStudent = async (req, res, next) => {
 
     let stud = await student.findById(sId)
     res.json({ students: stud })
+}
+
+exports.studentLogin = async (req, res, next) => {
+    try {
+        let email = req.body.email
+        let pass = req.body.password
+
+        const student = await Student.findOne({ email: email })
+        if (!student) {
+            throw new Error('no student found')
+        }
+        const password = await bcrypt.compare(pass, student.password)
+
+        if (password) {
+            res.json({ student })
+        }
+        else {
+            throw new Error('pass dont match')
+        }
+    }
+    catch (error) {
+        console.log(error);
+        
+    }
 }

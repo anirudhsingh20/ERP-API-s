@@ -8,5 +8,7 @@ router.post('/student-signup',studentController.postStudent)
 
 router.get('/get-students',studentController.getStudents)
 
+router.post('/student-login',studentController.studentLogin)
+
 
 module.exports = router
